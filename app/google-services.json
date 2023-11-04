@@ -1,13 +1,14 @@
 {
   "project_info": {
-    "project_number": "749800112274",
-    "project_id": "brain-test-54bfd",
-    "storage_bucket": "brain-test-54bfd.appspot.com"
+    "project_number": "656927079819",
+    "firebase_url": "https://fir-realtimekotlin-8dd9f-default-rtdb.firebaseio.com",
+    "project_id": "fir-realtimekotlin-8dd9f",
+    "storage_bucket": "fir-realtimekotlin-8dd9f.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:749800112274:android:ee86fc058f37e15f99e64b",
+        "mobilesdk_app_id": "1:656927079819:android:adf142d0cee271ef2e038e",
         "android_client_info": {
           "package_name": "com.example.Quizify"
         }
@@ -15,7 +16,26 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyC2bKGtxLm8sKSJQQl6RM0wyt8oFy9EQiQ"
+          "current_key": "AIzaSyBpmz-A2La6oLg1xQgAts7-2aNcbPtFsz0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:656927079819:android:6fa33cf8e878a3b72e038e",
+        "android_client_info": {
+          "package_name": "com.example.csvtofirebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpmz-A2La6oLg1xQgAts7-2aNcbPtFsz0"
         }
       ],
       "services": {
