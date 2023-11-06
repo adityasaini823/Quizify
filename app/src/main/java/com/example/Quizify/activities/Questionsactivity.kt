@@ -32,7 +32,12 @@ data class Question(
 )
 
 @Composable
-fun QuestionItem(question: Question, questionNumber: Int, selectedAnswer: MutableState<String?>) {
+fun QuestionItem(
+    question: Question,
+    questionNumber: Int,
+    selectedAnswer: MutableState<String?>, // Change to a mutable state
+    userAnswers: MutableList<String?>
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -50,38 +55,30 @@ fun QuestionItem(question: Question, questionNumber: Int, selectedAnswer: Mutabl
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        val radioOptions = rememberUpdatedState(question.answers)
-        val selectedOption = selectedAnswer.value
-        val isCorrect= selectedOption==question.correctAnswer
-        radioOptions.value.forEach { option ->
-            val isSelected = option == selectedOption
+        val isCorrect = selectedAnswer.value == question.correctAnswer
+
+        question.answers.forEach { option ->
+            val isSelected = option == selectedAnswer.value
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .selectable(
-                        selected = isSelected,
-                        onClick = {
-                            if (!isSelected) {
-                                selectedAnswer.value = option
-                            }
-                        }
-                    )
                     .padding(8.dp)
             ) {
                 RadioButton(
                     selected = isSelected,
+                    enabled = selectedAnswer.value == null, // Disable further selection if an answer is already selected
                     onClick = {
-                        if (!isSelected) {
+                        if (selectedAnswer.value == null) {
                             selectedAnswer.value = option
+                            userAnswers[questionNumber - 1] = option // Update user's answer
                         }
                     }
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = option)
-                if(isSelected && isCorrect){
+                if (isSelected && isCorrect) {
                     Text(text = "Correct! ${question.correctAnswer} ", color = Color.Green)
-                }
-                else if (isSelected && !isCorrect) {
+                } else if (isSelected && !isCorrect) {
                     Text(text = "Incorrect! ${question.correctAnswer}", color = Color.Red)
                 }
             }
@@ -90,9 +87,9 @@ fun QuestionItem(question: Question, questionNumber: Int, selectedAnswer: Mutabl
 }
 
 @Composable
-fun ListWithButtons(questions: List<Question>) {
+fun ListWithButtons(questions: List<Question>, userAnswers: MutableList<String?>) {
     var currentIndex by remember { mutableStateOf(0) }
-    val selectedAnswer = remember { mutableStateOf<String?>(null) }
+    val selectedAnswer = remember { mutableStateOf<String?>(null) } // Use remember to initialize it
 
     Column(
         modifier = Modifier
@@ -103,7 +100,8 @@ fun ListWithButtons(questions: List<Question>) {
             QuestionItem(
                 question = questions[currentIndex],
                 questionNumber = currentIndex + 1,
-                selectedAnswer = selectedAnswer
+                selectedAnswer = selectedAnswer,
+                userAnswers = userAnswers
             )
         }
 
@@ -117,7 +115,7 @@ fun ListWithButtons(questions: List<Question>) {
                 onClick = {
                     if (currentIndex > 0) {
                         currentIndex--
-                        selectedAnswer.value = null // Reset selected answer
+                        selectedAnswer.value = userAnswers[currentIndex] // Restore user's answer
                     }
                 },
                 enabled = currentIndex > 0
@@ -129,7 +127,8 @@ fun ListWithButtons(questions: List<Question>) {
                 onClick = {
                     if (currentIndex < questions.size - 1) {
                         currentIndex++
-                        selectedAnswer.value = null // Reset selected answer
+                        // Clear the selected answer for the next question
+                        selectedAnswer.value = null
                     }
                 },
                 enabled = currentIndex < questions.size - 1
@@ -140,6 +139,9 @@ fun ListWithButtons(questions: List<Question>) {
     }
 }
 
+
+
+
 @Composable
 fun Questionsactivity() {
     // Initialize Firebase database reference
@@ -147,6 +149,7 @@ fun Questionsactivity() {
 
     // Fetch questions from Firebase
     var questions by remember { mutableStateOf(emptyList<Question>()) }
+    var userAnswers by remember { mutableStateOf(mutableListOf<String?>()) }
 
     LaunchedEffect(Unit) {
         database.child("MCQS").addListenerForSingleValueEvent(object : ValueEventListener {
@@ -160,6 +163,7 @@ fun Questionsactivity() {
                     fetchedQuestions.add(questionItem)
                 }
                 questions = fetchedQuestions
+                userAnswers = MutableList(fetchedQuestions.size) { null } // Initialize userAnswers list
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -168,9 +172,10 @@ fun Questionsactivity() {
         })
     }
 
-    ListWithButtons(questions = questions)
+    ListWithButtons(questions = questions, userAnswers = userAnswers)
     SystemBackButtonHandler()
 }
+
 @Composable
 @Preview
 fun QuestionsActivityPreview() {
@@ -183,5 +188,5 @@ fun QuestionsActivityPreview() {
         // Add more sample questions here
     )
 
-    ListWithButtons(questions = sampleQuestions)
+    ListWithButtons(questions = sampleQuestions, userAnswers = MutableList(sampleQuestions.size) { null })
 }
