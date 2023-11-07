@@ -1,5 +1,4 @@
 package com.example.Quizify.activities
-
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -23,11 +22,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -185,7 +180,6 @@ fun Loginactivity(loginViewModel: LoginViewModel = viewModel()){
                         else PasswordVisualTransformation()
                     )
 
-
                     Spacer(modifier = Modifier.height(30.dp))
                     UnderlinedTextComponent(value = "Forget Password?", onClick = {
                         Quizapprouter.navigateTo(Screen.ForgetPassword)
@@ -203,22 +197,30 @@ fun Loginactivity(loginViewModel: LoginViewModel = viewModel()){
                             loginViewModel.onEvent(LoginUIevents.loginButtonClicked)
                         }
                     })
+
                     Spacer(modifier = Modifier.height(30.dp))
                     DividerTextComponent()
                     ClickableTextComponent(value1 = "Don't have an account? ", value2 = "Create an account", onTextSelected = {
                         Quizapprouter.navigateTo(Screen.Signupactivity)
                     })
+
+                    // Google Sign-In Button
+                    ButtonComponent(value = "Sign in with Google", onButtonClicked = {
+                        // Implement Google Sign-In logic here
+                    })
                 }
             }
         }
 
-        if(loginViewModel.loginInProgress.value){
+        if (loginViewModel.loginInProgress.value) {
             CircularProgressIndicator()
         }
     }
 
     SystemBackButtonHandler()
 }
+
+
 
 private fun isEmailValid(email: String): Boolean {
     val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
@@ -227,6 +229,6 @@ private fun isEmailValid(email: String): Boolean {
 
 @Preview
 @Composable
-fun Loginpreview(){
+fun Loginpreview() {
     Loginactivity()
 }

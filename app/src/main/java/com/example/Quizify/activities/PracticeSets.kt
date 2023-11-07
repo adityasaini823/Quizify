@@ -1,6 +1,7 @@
 package com.example.Quizify.activities
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +22,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.Quizify.navigation.Quizapprouter
 import com.example.Quizify.navigation.Screen
 import com.example.Quizify.navigation.SystemBackButtonHandler
@@ -72,8 +76,8 @@ fun PracticeSets(names:List<String> =List(20){(it + 1).toString()}){
 fun ListItem(name: String){
     Surface(
         color = Color(0xFFD7EFFE),
-        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
-        onClick={Quizapprouter.navigateTo(Screen.Questionsactivity)}
+        modifier= Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
+        onClick = {Quizapprouter.navigateTo(Screen.Questionsactivity)}
     ) {
         Row(modifier = Modifier
             .padding(16.dp)
@@ -87,4 +91,7 @@ fun ListItem(name: String){
         }
     }
     SystemBackButtonHandler()
+
+
 }
+

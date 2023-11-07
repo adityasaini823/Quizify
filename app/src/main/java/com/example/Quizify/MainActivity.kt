@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.Quizify.activities.PracticeSets
 import com.example.Quizify.activities.Questionsactivity
 import com.example.Quizify.app.Quizapp
 import com.google.firebase.FirebaseApp
@@ -18,7 +19,8 @@ class MainActivity : ComponentActivity() {
         FirebaseApp.initializeApp(this)
         setContent {
 
-            Questionsactivity()
+            Quizapp()
         }
+
     }
 }
